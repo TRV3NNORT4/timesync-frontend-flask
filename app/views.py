@@ -30,14 +30,14 @@ def isLoggedIn():
     return True
 
 
-def getUser():
+def getUser(username):
     if not isLoggedIn():
         return {'error': "Not logged in."}
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
                            token=session['token'])
-    user = ts.get_users(username=session['username'])
+    user = ts.get_users(username=username)
 
     return user
 
@@ -48,7 +48,7 @@ def index():
     loggedIn = isLoggedIn()
 
     if loggedIn:
-        user = getUser()
+        user = getUser(session['user']['username'])
         if 'error' in user or 'pymesync error' in user:
             print user
             return "There was an error.", 500
@@ -87,8 +87,16 @@ def login():
             return "There was an error.", 500
         # Else success, redirect to index page
         else:
-            session['username'] = username
             session['token'] = token['token']
+            user = getUser(username)
+
+            # TODO: Better error handling
+            if 'error' in session['user']:
+                print user
+                return "There was an error.", 500
+
+            session['user'] = user
+
             return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
