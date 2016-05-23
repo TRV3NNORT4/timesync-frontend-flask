@@ -195,9 +195,12 @@ def edit():
     for project in projects:
         choices.append((project['name'], project['name']))
 
-    uuid = request.args.get('time')
+    uuid = request.args.get('time') if not ts.test else 'test'
 
     time = ts.get_times({'uuid': uuid})
+
+    if ts.test:
+        time = time[0]
 
     if 'error' in time or 'pymesync error' in time:
         return 'There was an error', 500
