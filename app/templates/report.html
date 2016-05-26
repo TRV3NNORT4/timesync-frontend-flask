@@ -2,25 +2,6 @@
 
 {% block title %} View Times {% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
-
-<script>
-function clearForm(form)
-{
-    for (i = 0; i < form.elements.length; i++)
-    {
-        if (form.elements[i].type == "text")
-        {
-            form.elements[i].value = "";
-        }
-    }
-
-    form.submit();
-}
-</script>
-{% endblock %}
-
 {% block body%}
     <div class="filter-params">
         <form method="POST">
@@ -60,4 +41,20 @@ function clearForm(form)
             {% endfor %}
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
+
+<script>
+function clearForm(form) {
+    for (i = 0; i < form.elements.length; i++) {
+        if (form.elements[i].type == "text") {
+            form.elements[i].value = "";
+        }
+    }
+
+    form.submit();
+}
+</script>
 {% endblock %}
